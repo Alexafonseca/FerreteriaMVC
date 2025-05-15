@@ -7,6 +7,7 @@ import Controlador.CategoriaControlador;
 import Modelo.Categoria;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Alexa
@@ -14,7 +15,7 @@ import javax.swing.table.DefaultTableModel;
 public class VistaCategoria extends javax.swing.JPanel {
 
     private final CategoriaControlador categoriaControlador;
-    private int id_CategoriaSeleccionada;
+    private Integer idCategoriaSeleccionada;
 
     /**
      * Creates new form VistaCategoria
@@ -80,6 +81,11 @@ public class VistaCategoria extends javax.swing.JPanel {
                 textBuscarActionPerformed(evt);
             }
         });
+        textBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                textBuscarKeyTyped(evt);
+            }
+        });
 
         btnGuardar.setText("Guardar");
         btnGuardar.addAncestorListener(new javax.swing.event.AncestorListener() {
@@ -98,6 +104,11 @@ public class VistaCategoria extends javax.swing.JPanel {
         });
 
         btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
 
         btnEliminar.setText("Eliminar");
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
@@ -124,6 +135,11 @@ public class VistaCategoria extends javax.swing.JPanel {
                 "ID Categoria", "Nombre", "Descripcion"
             }
         ));
+        tablaCategorias.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaCategoriasMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tablaCategorias);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -194,7 +210,7 @@ public class VistaCategoria extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void textBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textBuscarActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_textBuscarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
@@ -227,10 +243,72 @@ javax.swing. JOptionPane. showMessageDialog(this, "Selecciona una fila para elim
     }//GEN-LAST:event_accionBotonGuardar
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+        String nombre = textNombreCategoria.getText();
+      String descripcion = textDescripcionCategoria.getText( );
 
+      if (idCategoriaSeleccionada!= null && !nombre. isEmpty( ) && !descripcion. isEmpty( ) ) {
+
+      categoriaControlador.actualizarCategoria(idCategoriaSeleccionada, nombre, descripcion);
+      cargarDatosTabla( );
+
+      textNombreCategoria.setText("");
+      textDescripcionCategoria.setText("");
+      idCategoriaSeleccionada= null;
+
+      btnEliminar.setEnabled(true);
+      btnGuardar.setEnabled(true);
+      } else {
+      javax.swing. JOptionPane. showMessageDialog(this, "Por favor, llene todos los campos. ", "Error", javax. swing. JOptionPane. ERROR_MESSAGE);
+      }
 
 
     }//GEN-LAST:event_btnActualizarActionPerformed
+
+    private void tablaCategoriasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaCategoriasMouseClicked
+        if (evt.getClickCount() == 2) {
+
+    int filaSeleccionada = tablaCategorias.getSelectedRow();
+
+    if (filaSeleccionada != -1) {
+
+    idCategoriaSeleccionada = (int) tablaCategorias.getValueAt(filaSeleccionada, 0);
+    String nombre = (String) tablaCategorias.getValueAt(filaSeleccionada, 1);
+    String descripcion = (String) tablaCategorias.getValueAt(filaSeleccionada, 2);
+
+    textNombreCategoria.setText(nombre);
+    textDescripcionCategoria.setText(descripcion);
+
+    btnEliminar. setEnabled(false);
+    btnGuardar.setEnabled(false);}
+        }
+    }//GEN-LAST:event_tablaCategoriasMouseClicked
+
+    private void textBuscarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textBuscarKeyTyped
+       String textoBusqueda = textBuscar.getText().trim().toLowerCase();
+          List<Categoria> categorias = categoriaControlador.obtenerTodasCategorias();
+
+          DefaultTableModel modelo = (DefaultTableModel) tablaCategorias.getModel();
+          modelo.setRowCount(0);
+
+          if (categorias != null) {
+          for (Categoria cat : categorias) {
+          if (textoBusqueda. isEmpty( ) ||
+          cat.getNombreCategoria().toLowerCase().contains(textoBusqueda) ||
+          cat.getDescripcionCategoria().toLowerCase().contains(textoBusqueda)) {
+          Object[] fila = {
+          cat.getIdCategoria(),
+          cat.getNombreCategoria(),
+          cat.getDescripcionCategoria()
+          };
+          modelo.addRow(fila);
+             }
+          }
+       }
+    }//GEN-LAST:event_textBuscarKeyTyped
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
