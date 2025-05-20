@@ -114,7 +114,15 @@ public class VistaEmpleado extends javax.swing.JPanel {
             new String [] {
                 "ID Empleado", "Nombre1", "Nombre2", "Apellido1", "Apellido2", "Ceulalr", "Cargo", "Fecha Contratacion"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tablaEmpleados.setRowSelectionAllowed(false);
         tablaEmpleados.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {

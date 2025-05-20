@@ -72,8 +72,10 @@ public class VistaCategoria extends javax.swing.JPanel {
         setBackground(new java.awt.Color(255, 204, 255));
         setBorder(javax.swing.BorderFactory.createTitledBorder("Categorias"));
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel1.setText("Nombre Categoria");
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel2.setText("Descripcion Categoria");
 
         textBuscar.addActionListener(new java.awt.event.ActionListener() {
@@ -134,7 +136,15 @@ public class VistaCategoria extends javax.swing.JPanel {
             new String [] {
                 "ID Categoria", "Nombre", "Descripcion"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tablaCategorias.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tablaCategoriasMouseClicked(evt);
